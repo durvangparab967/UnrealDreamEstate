@@ -1,0 +1,30 @@
+name: Daily Real Estate Scraper
+
+on:
+  schedule:
+    # Runs every day at 2:00 AM IST (8:30 PM UTC)
+    - cron: '30 20 * * *'
+  workflow_dispatch: # Allows you to trigger it manually from the GitHub dashboard
+
+jobs:
+  run-scraper:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          pip install playwright playwright-stealth supabase
+          playwright install chromium
+
+      - name: Run Scraper Script
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: python scraper.py
