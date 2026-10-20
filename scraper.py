@@ -19,7 +19,7 @@ async def scrape_properties():
         # The stealth patches are now automatically applied to 'page'
         # No need to call stealth_async(page) anymore
         
-        target_url = "https://www.example-broker-portal.com/mumbai/borivali-west-flats"
+        target_url = "https://www.nobroker.in/property/rent/bangalore/Banashankari?searchParam=W3sibGF0IjoxMi45MjU0NTMzLCJsb24iOjc3LjU0Njc1NywicGxhY2VJZCI6IkNoSUp0MWpESWl3LXJqc1I3X0kyZnhCb2NCVSIsInBsYWNlTmFtZSI6IkJhbmFzaGFua2FyaSJ9XQ==&radius=2.0&sharedAccomodation=0&city=bangalore&locality=Banashankari"
         print(f"Navigating to {target_url}...")
         await page.goto(target_url, wait_until="domcontentloaded")
         
