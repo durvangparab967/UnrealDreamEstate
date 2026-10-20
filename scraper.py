@@ -1,24 +1,24 @@
 import asyncio
 import os
+# 1. Update the imports
 from playwright.async_api import async_playwright
-from playwright_stealth import stealth_async
+from playwright_stealth import Stealth 
 from supabase import create_client, Client
 
-# Initialize Supabase client
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
-SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") # Use the service role key to bypass RLS policies
+SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 async def scrape_properties():
-    async with async_playwright() as p:
+    # 2. Use the new Stealth().use_async() context manager wrapper
+    async with Stealth().use_async(async_playwright()) as p:
         # Launch browser in headless mode
         browser = await p.chromium.launch(headless=True)
         page = await browser.new_page()
         
-        # Apply stealth configuration to bypass Cloudflare/Bot Detection
-        await stealth_async(page)
+        # The stealth patches are now automatically applied to 'page'
+        # No need to call stealth_async(page) anymore
         
-        # Target URL (Example: Filtered search for Borivali West)
         target_url = "https://www.example-broker-portal.com/mumbai/borivali-west-flats"
         print(f"Navigating to {target_url}...")
         await page.goto(target_url, wait_until="domcontentloaded")
